@@ -1,13 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercise Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #exercise {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: #fff;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to my blog</h1>
-    <h4>Today is a great day</h4>
-    <a href="https://www.imda.gov.sg/">Link to IMDA's website</a>
+  <h1>Exercise Generator</h1>
+  <div id="exercise">Click the button to generate a new exercise</div>
+  <button onclick="generateExercise()">Generate Exercise</button>
+
+  <script>
+    // Array of exercises
+    const exercises = [
+      'Pushups',
+      'Situps',
+      'Jumping Jacks',
+      'Squats',
+      'Lunges',
+      'Plank',
+      'Burpees',
+      'Mountain Climbers',
+      'Crunches',
+      'High Knees'
+    ];
+
+    // Function to generate a random exercise
+    function generateExercise() {
+      const randomIndex = Math.floor(Math.random() * exercises.length);
+      const exercise = exercises[randomIndex];
+      document.getElementById('exercise').textContent = exercise;
+    }
+  </script>
 </body>
 </html>
+
