@@ -28,106 +28,130 @@
     </script>
     
 
-    
+    <div class="d-flex justify-content-between">
+        <!-- First Program Checklist -->
+        <div class="d-flex flex-column p-4 gap-4 py-md-5 align-items-center">
+          <h2>Panel of experts</h2>
+          <ul id="program1TaskList" class="list-unstyled">
+            <!-- Existing list items for Programme 1 go here -->
+          </ul>
+      
+          <div class="input-group mb-3">
+            <input id="program1TaskInput" type="text" class="form-control" placeholder="Enter task for Programme 1...">
+            <button id="addTaskProgram1Btn" class="btn btn-primary" type="button">Add Task for Panel</button>
+          </div>
+        </div>
+      
+        <!-- Second Program Checklist -->
+        <div class="d-flex flex-column p-4 gap-4 py-md-5 align-items-center">
+          <h2>Call for Proposal</h2>
+          <ul id="program2TaskList" class="list-unstyled">
+            <!-- Existing list items for Programme 2 go here -->
+          </ul>
+      
+          <div class="input-group mb-3">
+            <input id="program2TaskInput" type="text" class="form-control" placeholder="Enter task for Programme 2...">
+            <button id="addTaskProgram2Btn" class="btn btn-primary" type="button">Add Task for CFP</button>
+          </div>
+        </div>
+      </div>
+      
+      
+      <!-- Script to save tasks and checkbox states to local storage -->
+      <script>
+        // Function to save tasks and their states to local storage
+        function saveTasksToLocalStorage() {
+          const tasks = {
+            program1: document.getElementById('program1TaskList').innerHTML,
+            program2: document.getElementById('program2TaskList').innerHTML
+          };
+          localStorage.setItem('tasks', JSON.stringify(tasks));
+      
+          const checkboxes = document.querySelectorAll('.form-check-input');
+          checkboxes.forEach((checkbox, index) => {
+            localStorage.setItem(`checkbox${index}`, checkbox.checked);
+          });
+        }
+      
+        
+        // Function to load tasks and their states from local storage
+        function loadTasksFromLocalStorage() {
+          const savedTasks = localStorage.getItem('tasks');
+          if (savedTasks) {
+            const tasks = JSON.parse(savedTasks);
+            document.getElementById('program1TaskList').innerHTML = tasks.program1;
+            document.getElementById('program2TaskList').innerHTML = tasks.program2;
+          }
+      
+          const checkboxes = document.querySelectorAll('.form-check-input');
+          checkboxes.forEach((checkbox, index) => {
+            const isChecked = localStorage.getItem(`checkbox${index}`) === 'true';
+            checkbox.checked = isChecked;
+          });
+        }
+      
+        // Load tasks and their states when the page loads
+        window.addEventListener('DOMContentLoaded', loadTasksFromLocalStorage);
+      
+        // Save tasks and their states when a checkbox is clicked or a task is added
+        document.querySelectorAll('.form-check-input').forEach(checkbox => {
+          checkbox.addEventListener('click', saveTasksToLocalStorage);
+        });
+        document.getElementById('addTaskProgram1Btn').addEventListener('click', saveTasksToLocalStorage);
+        document.getElementById('addTaskProgram2Btn').addEventListener('click', saveTasksToLocalStorage);
+      
+        // Function to add a new task for Programme 1
+        function addTaskForProgram1() {
+          const taskInput = document.getElementById('program1TaskInput');
+          addTask(taskInput.value.trim(), '#program1TaskList');
+        }
+      
+        // Function to add a new task for Programme 2
+        function addTaskForProgram2() {
+          const taskInput = document.getElementById('program2TaskInput');
+          addTask(taskInput.value.trim(), '#program2TaskList');
+        }
+      
+        // Function to add a new task
+        function addTask(taskText, listSelector) {
+          if (taskText) {
+            const taskList = document.querySelector(listSelector);
+            const li = document.createElement('li');
+            li.classList.add('mb-3');
+            li.innerHTML = `
+              <label class="d-flex gap-2">
+                <input class="form-check-input" type="checkbox" value="">
+                <span>${taskText}</span>
+              </label>
+            `;
+            taskList.appendChild(li);
+            saveTasksToLocalStorage(); // Save the state of tasks after adding the new task
+          }
+        }
+      
+        // Add event listener to the "Add Task" button for Programme 1
+        document.getElementById('addTaskProgram1Btn').addEventListener('click', addTaskForProgram1);
+      
+        // Add event listener to the "Add Task" button for Programme 2
+        document.getElementById('addTaskProgram2Btn').addEventListener('click', addTaskForProgram2);
+      
+        // Add event listener to handle "Enter" key press on input fields
+        document.getElementById('program1TaskInput').addEventListener('keydown', function(event) {
+          if (event.keyCode === 13) { // Check if the pressed key is "Enter"
+            addTaskForProgram1(); // Call the function to add a task for Programme 1
+          }
+        });
+      
+        document.getElementById('program2TaskInput').addEventListener('keydown', function(event) {
+          if (event.keyCode === 13) { // Check if the pressed key is "Enter"
+            addTaskForProgram2(); // Call the function to add a task for Programme 2
+          }
+        });
 
-<!-- checkbox -->
-<div class="d-flex flex-column p-4 gap-4 py-md-5 align-items-center justify-content-center">
-  <ul class="list-unstyled">
-    <li class="mb-3">
-      <label class="d-flex flex-column gap-1">
-        <input class="form-check-input" type="checkbox" value="" checked="">
-        <span>
-          First checkbox
-        </span>
-        <small class="text-body-secondary">With support text underneath to add more detail</small>
-      </label>
-    </li>
-    <li class="mb-3">
-      <label class="d-flex flex-column gap-1">
-        <input class="form-check-input" type="checkbox" value="">
-        <span>
-          Second checkbox
-        </span>
-        <small class="text-body-secondary">Some other text goes here</small>
-      </label>
-    </li>
-    <li>
-      <label class="d-flex flex-column gap-1">
-        <input class="form-check-input" type="checkbox" value="">
-        <span>
-          Third checkbox
-        </span>
-        <small class="text-body-secondary">And we end with another snippet of text</small>
-      </label>
-    </li>
-  </ul>
-</div>
 
-
-<script>
-    // Function to save checkbox state to local storage
-    function saveCheckboxState() {
-      const checkboxes = document.querySelectorAll('.form-check-input');
-      checkboxes.forEach((checkbox, index) => {
-        localStorage.setItem(`checkbox${index}`, checkbox.checked);
-      });
-    }
-  
-    // Function to load checkbox state from local storage
-    function loadCheckboxState() {
-      const checkboxes = document.querySelectorAll('.form-check-input');
-      checkboxes.forEach((checkbox, index) => {
-        const isChecked = localStorage.getItem(`checkbox${index}`) === 'true';
-        checkbox.checked = isChecked;
-      });
-    }
-  
-    // Load checkbox state when the page loads
-    window.addEventListener('DOMContentLoaded', loadCheckboxState);
-  
-    // Save checkbox state when a checkbox is clicked
-    document.querySelectorAll('.form-check-input').forEach(checkbox => {
-      checkbox.addEventListener('click', saveCheckboxState);
-    });
-  </script>
-
-<div class="d-flex flex-column p-4 gap-4 py-md-5 align-items-center justify-content-center">
-    <ul id="taskList" class="list-unstyled">
-      <!-- Existing list items go here -->
-    </ul>
-    
-    <div class="input-group mb-3">
-      <input id="taskInput" type="text" class="form-control" placeholder="Enter task...">
-      <button id="addTaskBtn" class="btn btn-primary" type="button">Add Task</button>
-    </div>
-  </div>
-  
-  <script>
-    // Function to add a new task to the list
-    function addTask() {
-      const taskInput = document.getElementById('taskInput');
-      const taskText = taskInput.value.trim();
-      if (taskText) {
-        const taskList = document.getElementById('taskList');
-        const li = document.createElement('li');
-        li.classList.add('mb-3');
-        li.innerHTML = `
-          <label class="d-flex gap-2">
-            <input class="form-check-input" type="checkbox" value="">
-            <span>${taskText}</span>
-          </label>
-        `;
-        taskList.appendChild(li);
-        taskInput.value = ''; // Clear the input field
-        saveCheckboxState(); // Save the state of checkboxes after adding the new task
-      }
-    }
-  
-    // Add event listener to the "Add Task" button
-    document.getElementById('addTaskBtn').addEventListener('click', addTask);
-  </script>
-  
-
+      </script>
+      
+      
 </body>
 </html> 
     
