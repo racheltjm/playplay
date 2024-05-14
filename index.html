@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,7 +26,6 @@
       // Initial call to update the live date when the page loads
       updateLiveDate();
     </script>
-    
 
     <div class="d-flex justify-content-between">
         <!-- First Program Checklist -->
@@ -56,102 +55,74 @@
         </div>
       </div>
       
-      
       <!-- Script to save tasks and checkbox states to local storage -->
       <script>
         // Function to save tasks and their states to local storage
         function saveTasksToLocalStorage() {
-          const tasks = {
-            program1: document.getElementById('program1TaskList').innerHTML,
-            program2: document.getElementById('program2TaskList').innerHTML
-          };
-          localStorage.setItem('tasks', JSON.stringify(tasks));
-      
-          const checkboxes = document.querySelectorAll('.form-check-input');
-          checkboxes.forEach((checkbox, index) => {
-            localStorage.setItem(`checkbox${index}`, checkbox.checked);
-          });
+            const tasks = {
+                program1: document.getElementById('program1TaskList').innerHTML,
+                program2: document.getElementById('program2TaskList').innerHTML
+            };
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+
+            const checkboxes = document.querySelectorAll('.form-check-input');
+            checkboxes.forEach((checkbox, index) => {
+                localStorage.setItem(`checkbox${index}`, checkbox.checked);
+            });
         }
-      
-        
+
         // Function to load tasks and their states from local storage
         function loadTasksFromLocalStorage() {
-          const savedTasks = localStorage.getItem('tasks');
-          if (savedTasks) {
-            const tasks = JSON.parse(savedTasks);
-            document.getElementById('program1TaskList').innerHTML = tasks.program1;
-            document.getElementById('program2TaskList').innerHTML = tasks.program2;
-          }
-      
-          const checkboxes = document.querySelectorAll('.form-check-input');
-          checkboxes.forEach((checkbox, index) => {
-            const isChecked = localStorage.getItem(`checkbox${index}`) === 'true';
-            checkbox.checked = isChecked;
-          });
+            const savedTasks = localStorage.getItem('tasks');
+            if (savedTasks) {
+                const tasks = JSON.parse(savedTasks);
+                document.getElementById('program1TaskList').innerHTML = tasks.program1;
+                document.getElementById('program2TaskList').innerHTML = tasks.program2;
+
+                const checkboxes = document.querySelectorAll('.form-check-input');
+                checkboxes.forEach((checkbox, index) => {
+                    const isChecked = localStorage.getItem(`checkbox${index}`) === 'true';
+                    checkbox.checked = isChecked;
+                });
+            }
         }
-      
+
         // Load tasks and their states when the page loads
-        window.addEventListener('DOMContentLoaded', loadTasksFromLocalStorage);
-      
-        // Save tasks and their states when a checkbox is clicked or a task is added
-        document.querySelectorAll('.form-check-input').forEach(checkbox => {
-          checkbox.addEventListener('click', saveTasksToLocalStorage);
+        window.addEventListener('DOMContentLoaded', function() {
+            loadTasksFromLocalStorage();
+            
+            // Attach event listeners for checkboxes after loading
+            document.querySelectorAll('.form-check-input').forEach(checkbox => {
+                checkbox.addEventListener('click', saveTasksToLocalStorage);
+            });
         });
-        document.getElementById('addTaskProgram1Btn').addEventListener('click', saveTasksToLocalStorage);
-        document.getElementById('addTaskProgram2Btn').addEventListener('click', saveTasksToLocalStorage);
-      
-        // Function to add a new task for Programme 1
-        function addTaskForProgram1() {
-          const taskInput = document.getElementById('program1TaskInput');
-          addTask(taskInput.value.trim(), '#program1TaskList');
-        }
-      
-        // Function to add a new task for Programme 2
-        function addTaskForProgram2() {
-          const taskInput = document.getElementById('program2TaskInput');
-          addTask(taskInput.value.trim(), '#program2TaskList');
-        }
-      
+
+        // Save tasks and their states when a task is added
+        document.getElementById('addTaskProgram1Btn').addEventListener('click', function() {
+            const taskInput = document.getElementById('program1TaskInput');
+            addTask(taskInput.value.trim(), '#program1TaskList');
+        });
+        document.getElementById('addTaskProgram2Btn').addEventListener('click', function() {
+            const taskInput = document.getElementById('program2TaskInput');
+            addTask(taskInput.value.trim(), '#program2TaskList');
+        });
+
         // Function to add a new task
         function addTask(taskText, listSelector) {
-          if (taskText) {
-            const taskList = document.querySelector(listSelector);
-            const li = document.createElement('li');
-            li.classList.add('mb-3');
-            li.innerHTML = `
-              <label class="d-flex gap-2">
-                <input class="form-check-input" type="checkbox" value="">
-                <span>${taskText}</span>
-              </label>
-            `;
-            taskList.appendChild(li);
-            saveTasksToLocalStorage(); // Save the state of tasks after adding the new task
-          }
+            if (taskText) {
+                const taskList = document.querySelector(listSelector);
+                const li = document.createElement('li');
+                li.classList.add('mb-3');
+                li.innerHTML = `
+                    <label class="d-flex gap-2">
+                        <input class="form-check-input" type="checkbox" value="">
+                        <span>${taskText}</span>
+                    </label>
+                `;
+                taskList.appendChild(li);
+                saveTasksToLocalStorage(); // Save task state after adding a new task
+            }
         }
-      
-        // Add event listener to the "Add Task" button for Programme 1
-        document.getElementById('addTaskProgram1Btn').addEventListener('click', addTaskForProgram1);
-      
-        // Add event listener to the "Add Task" button for Programme 2
-        document.getElementById('addTaskProgram2Btn').addEventListener('click', addTaskForProgram2);
-      
-        // Add event listener to handle "Enter" key press on input fields
-        document.getElementById('program1TaskInput').addEventListener('keydown', function(event) {
-          if (event.keyCode === 13) { // Check if the pressed key is "Enter"
-            addTaskForProgram1(); // Call the function to add a task for Programme 1
-          }
-        });
-      
-        document.getElementById('program2TaskInput').addEventListener('keydown', function(event) {
-          if (event.keyCode === 13) { // Check if the pressed key is "Enter"
-            addTaskForProgram2(); // Call the function to add a task for Programme 2
-          }
-        });
-
-
       </script>
-      
-      
 </body>
-</html> 
-    
+</html>
