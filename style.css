@@ -1,4 +1,22 @@
-h1 {
-    color:red;
+/* header of title */
+/* h1 {
+    color:rgb(234, 255, 0);
     background-color: cornflowerblue;
+
+    text-align: center;
+    border: 10px orchid solid;
+    margin-bottom: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+} */
+
+h1 {
+    color:blueviolet
+}
+.title {
+    background-color: antiquewhite;
+    text-align: center;
+}
+#important {
+    color: deeppink;
 }

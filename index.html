@@ -1,13 +1,133 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href=""style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Welcome to my blog</h1>
-    <h3>Written by Rachel</h3>
+    <h1 class="title">What's done and what's not</h1>
+    <h3 class="title" id="important">by Rachel</h3>
+    <h4 id="liveDate" class="mb-3"></h4>
+
+    <script>
+      // Function to update the live date
+      function updateLiveDate() {
+        const liveDateElement = document.getElementById('liveDate');
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Singapore' };
+        const formattedDate = new Date().toLocaleDateString('en-SG', options);
+        liveDateElement.textContent = formattedDate;
+      }
+    
+      // Update the live date every second
+      setInterval(updateLiveDate, 1000);
+    
+      // Initial call to update the live date when the page loads
+      updateLiveDate();
+    </script>
+    
+
+    
+
+<!-- checkbox -->
+<div class="d-flex flex-column p-4 gap-4 py-md-5 align-items-center justify-content-center">
+  <ul class="list-unstyled">
+    <li class="mb-3">
+      <label class="d-flex flex-column gap-1">
+        <input class="form-check-input" type="checkbox" value="" checked="">
+        <span>
+          First checkbox
+        </span>
+        <small class="text-body-secondary">With support text underneath to add more detail</small>
+      </label>
+    </li>
+    <li class="mb-3">
+      <label class="d-flex flex-column gap-1">
+        <input class="form-check-input" type="checkbox" value="">
+        <span>
+          Second checkbox
+        </span>
+        <small class="text-body-secondary">Some other text goes here</small>
+      </label>
+    </li>
+    <li>
+      <label class="d-flex flex-column gap-1">
+        <input class="form-check-input" type="checkbox" value="">
+        <span>
+          Third checkbox
+        </span>
+        <small class="text-body-secondary">And we end with another snippet of text</small>
+      </label>
+    </li>
+  </ul>
+</div>
+
+
+<script>
+    // Function to save checkbox state to local storage
+    function saveCheckboxState() {
+      const checkboxes = document.querySelectorAll('.form-check-input');
+      checkboxes.forEach((checkbox, index) => {
+        localStorage.setItem(`checkbox${index}`, checkbox.checked);
+      });
+    }
+  
+    // Function to load checkbox state from local storage
+    function loadCheckboxState() {
+      const checkboxes = document.querySelectorAll('.form-check-input');
+      checkboxes.forEach((checkbox, index) => {
+        const isChecked = localStorage.getItem(`checkbox${index}`) === 'true';
+        checkbox.checked = isChecked;
+      });
+    }
+  
+    // Load checkbox state when the page loads
+    window.addEventListener('DOMContentLoaded', loadCheckboxState);
+  
+    // Save checkbox state when a checkbox is clicked
+    document.querySelectorAll('.form-check-input').forEach(checkbox => {
+      checkbox.addEventListener('click', saveCheckboxState);
+    });
+  </script>
+
+<div class="d-flex flex-column p-4 gap-4 py-md-5 align-items-center justify-content-center">
+    <ul id="taskList" class="list-unstyled">
+      <!-- Existing list items go here -->
+    </ul>
+    
+    <div class="input-group mb-3">
+      <input id="taskInput" type="text" class="form-control" placeholder="Enter task...">
+      <button id="addTaskBtn" class="btn btn-primary" type="button">Add Task</button>
+    </div>
+  </div>
+  
+  <script>
+    // Function to add a new task to the list
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        const taskList = document.getElementById('taskList');
+        const li = document.createElement('li');
+        li.classList.add('mb-3');
+        li.innerHTML = `
+          <label class="d-flex gap-2">
+            <input class="form-check-input" type="checkbox" value="">
+            <span>${taskText}</span>
+          </label>
+        `;
+        taskList.appendChild(li);
+        taskInput.value = ''; // Clear the input field
+        saveCheckboxState(); // Save the state of checkboxes after adding the new task
+      }
+    }
+  
+    // Add event listener to the "Add Task" button
+    document.getElementById('addTaskBtn').addEventListener('click', addTask);
+  </script>
+  
+
 </body>
-</html>
+</html> 
+    
