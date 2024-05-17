@@ -71,6 +71,7 @@ function addTask(taskText, listSelector) {
         li.innerHTML = `
             <label class="d-flex gap-2">
                 <input class="form-check-input" type="checkbox" value="">
+                
                 <span>${taskText}</span>
             </label>
         `;
@@ -98,3 +99,16 @@ document.getElementById('program2TaskInput').addEventListener('keydown', functio
         document.getElementById('program2TaskInput').value = ''; // Clear the input field
     }
 });
+
+// Function to delete checked tasks
+function deleteCheckedTasks() {
+    const checkedCheckboxes = document.querySelectorAll('.form-check-input:checked');
+    checkedCheckboxes.forEach(checkbox => {
+        const taskItem = checkbox.closest('li');
+        taskItem.remove(); // Remove the task item from the DOM
+    });
+    saveTasksToLocalStorage(); // Save the updated tasks to local storage
+}
+
+// Add event listener to the delete button
+document.getElementById('deleteTaskBtn').addEventListener('click', deleteCheckedTasks);
