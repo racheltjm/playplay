@@ -1,114 +1,145 @@
-// Function to update the live date
-function updateLiveDate() {
-    const liveDateElement = document.getElementById('liveDate');
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Singapore' };
-    const formattedDate = new Date().toLocaleDateString('en-SG', options);
-    liveDateElement.textContent = formattedDate;
-}
-
-// Update the live date every second
-setInterval(updateLiveDate, 1000);
-
-// Initial call to update the live date when the page loads
-updateLiveDate();
-
-// Function to save tasks and their states to local storage
-function saveTasksToLocalStorage() {
-    const tasks = {
-        program1: document.getElementById('program1TaskList').innerHTML,
-        program2: document.getElementById('program2TaskList').innerHTML
-    };
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-
-    const checkboxes = document.querySelectorAll('.form-check-input');
-    checkboxes.forEach((checkbox, index) => {
-        localStorage.setItem(`checkbox${index}`, checkbox.checked);
-    });
-}
-
-// Function to load tasks and their states from local storage
-function loadTasksFromLocalStorage() {
-    const savedTasks = localStorage.getItem('tasks');
-    if (savedTasks) {
-        const tasks = JSON.parse(savedTasks);
-        document.getElementById('program1TaskList').innerHTML = tasks.program1;
-        document.getElementById('program2TaskList').innerHTML = tasks.program2;
-
-        const checkboxes = document.querySelectorAll('.form-check-input');
-        checkboxes.forEach((checkbox, index) => {
-            const isChecked = localStorage.getItem(`checkbox${index}`) === 'true';
-            checkbox.checked = isChecked;
+document.addEventListener('DOMContentLoaded', function() {
+    const addProgramBtn = document.getElementById('addProgramBtn');
+    const programsContainer = document.getElementById('programs');
+  
+    // Function to load programs from localStorage
+    function loadPrograms() {
+      const programs = JSON.parse(localStorage.getItem('programs')) || [];
+      programs.forEach(program => {
+        createProgram(program.name, program.tasks);
+      });
+    }
+  
+    // Function to save programs to localStorage
+    function savePrograms() {
+      const programs = [];
+      document.querySelectorAll('.program').forEach(programDiv => {
+        const programName = programDiv.querySelector('h3').textContent;
+        const tasks = [];
+        programDiv.querySelectorAll('li').forEach(taskItem => {
+          tasks.push({
+            text: taskItem.querySelector('span').textContent,
+            completed: taskItem.querySelector('input[type="checkbox"]').checked
+          });
         });
+        programs.push({ name: programName, tasks });
+      });
+      localStorage.setItem('programs', JSON.stringify(programs));
     }
-}
-
-// Load tasks and their states when the page loads
-window.addEventListener('DOMContentLoaded', function() {
-    loadTasksFromLocalStorage();
-    
-    // Attach event listeners for checkboxes after loading
-    document.querySelectorAll('.form-check-input').forEach(checkbox => {
-        checkbox.addEventListener('click', saveTasksToLocalStorage);
-    });
-});
-
-// Save tasks and their states when a task is added
-document.getElementById('addTaskProgram1Btn').addEventListener('click', function() {
-    const taskInput = document.getElementById('program1TaskInput');
-    addTask(taskInput.value.trim(), '#program1TaskList');
-});
-document.getElementById('addTaskProgram2Btn').addEventListener('click', function() {
-    const taskInput = document.getElementById('program2TaskInput');
-    addTask(taskInput.value.trim(), '#program2TaskList');
-});
-
-// Function to add a new task
-function addTask(taskText, listSelector) {
+  
+    // Function to create a new program
+    function createProgram(name = 'New Program', tasks = []) {
+      const programDiv = document.createElement('div');
+      programDiv.classList.add('program');
+  
+      const programHeader = document.createElement('h3');
+      programHeader.textContent = name;
+  
+      const taskInput = document.createElement('input');
+      taskInput.type = 'text';
+      taskInput.placeholder = 'Add new task';
+      taskInput.classList.add('task-input');
+  
+      const addTaskBtn = document.createElement('button');
+      addTaskBtn.textContent = 'Add Task';
+      addTaskBtn.classList.add('add-task-btn');
+  
+      const taskList = document.createElement('ul');
+      taskList.classList.add('task-list');
+  
+      const deleteCheckedBtn = document.createElement('button');
+      deleteCheckedBtn.textContent = 'Delete Checked Tasks';
+      deleteCheckedBtn.classList.add('delete-checked-btn');
+  
+      const deleteProgramBtn = document.createElement('button');
+      deleteProgramBtn.textContent = 'Delete Program';
+      deleteProgramBtn.classList.add('delete-program-btn');
+  
+      // Function to handle adding tasks
+function addTask(taskInput, taskList) {
+    const taskText = taskInput.value.trim();
     if (taskText) {
-        const taskList = document.querySelector(listSelector);
-        const li = document.createElement('li');
-        li.classList.add('mb-3');
-        li.innerHTML = `
-            <label class="d-flex gap-2">
-                <input class="form-check-input" type="checkbox" value="">
-                
-                <span>${taskText}</span>
-            </label>
-        `;
-        taskList.appendChild(li);
-
-        // Attach event listener to the new checkbox
-        const checkbox = li.querySelector('.form-check-input');
-        checkbox.addEventListener('click', saveTasksToLocalStorage);
-
-        saveTasksToLocalStorage(); // Save task state after adding a new task
+      const listItem = document.createElement('li');
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+  
+      const span = document.createElement('span');
+      span.textContent = taskText;
+  
+      listItem.appendChild(checkbox);
+      listItem.appendChild(span);
+      taskList.appendChild(listItem);
+  
+      taskInput.value = '';
+      savePrograms();
     }
-}
-
-// Add event listener to handle "Enter" key press on input fields
-document.getElementById('program1TaskInput').addEventListener('keydown', function(event) {
-    if (event.keyCode === 13) { // Check if the pressed key is "Enter"
-        addTask(document.getElementById('program1TaskInput').value.trim(), '#program1TaskList'); // Call the function to add a task for Programme 1
-        document.getElementById('program1TaskInput').value = ''; // Clear the input field
+  }
+  
+  // Event listener for adding tasks with the "Enter" key
+  taskInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      addTask(taskInput, taskList);
     }
-});
-
-document.getElementById('program2TaskInput').addEventListener('keydown', function(event) {
-    if (event.keyCode === 13) { // Check if the pressed key is "Enter"
-        addTask(document.getElementById('program2TaskInput').value.trim(), '#program2TaskList'); // Call the function to add a task for Programme 2
-        document.getElementById('program2TaskInput').value = ''; // Clear the input field
+  });
+  
+  // Event listener for adding tasks with the button
+  addTaskBtn.addEventListener('click', function() {
+    addTask(taskInput, taskList);
+  });
+  
+      
+      // Event listener for deleting checked tasks
+      deleteCheckedBtn.addEventListener('click', function() {
+        const checkedTasks = taskList.querySelectorAll('input[type="checkbox"]:checked');
+        checkedTasks.forEach(task => task.parentElement.remove());
+        savePrograms();
+      });
+  
+      // Event listener for deleting the program
+      deleteProgramBtn.addEventListener('click', function() {
+        programDiv.remove();
+        savePrograms();
+      });
+  
+      // Append existing tasks if any
+      tasks.forEach(task => {
+        const listItem = document.createElement('li');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.completed;
+  
+        const span = document.createElement('span');
+        span.textContent = task.text;
+  
+        listItem.appendChild(checkbox);
+        listItem.appendChild(span);
+        taskList.appendChild(listItem);
+      });
+  
+      programDiv.appendChild(programHeader);
+      programDiv.appendChild(taskInput);
+      programDiv.appendChild(addTaskBtn);
+      programDiv.appendChild(taskList);
+      programDiv.appendChild(deleteCheckedBtn);
+      programDiv.appendChild(deleteProgramBtn);
+  
+      programsContainer.appendChild(programDiv);
     }
-});
-
-// Function to delete checked tasks
-function deleteCheckedTasks() {
-    const checkedCheckboxes = document.querySelectorAll('.form-check-input:checked');
-    checkedCheckboxes.forEach(checkbox => {
-        const taskItem = checkbox.closest('li');
-        taskItem.remove(); // Remove the task item from the DOM
+  
+    // Load programs from localStorage on page load
+    loadPrograms();
+  
+    // Event listener for adding new programs
+    addProgramBtn.addEventListener('click', function() {
+      const programName = prompt('Enter the name of the new program:');
+      if (programName) {
+        createProgram(programName);
+        savePrograms();
+      }
     });
-    saveTasksToLocalStorage(); // Save the updated tasks to local storage
-}
-
-// Add event listener to the delete button
-document.getElementById('deleteTaskBtn').addEventListener('click', deleteCheckedTasks);
+  
+    // Save the programs whenever a change happens in the programs container
+    programsContainer.addEventListener('change', savePrograms);
+  });
+  

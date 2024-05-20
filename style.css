@@ -9,3 +9,43 @@ h1 {
 #important {
     color: deeppink;
 }
+
+body {
+    font-family: 'Times New Roman', Times, serif;
+  }
+  
+  #programs {
+    margin-bottom: 20px;
+  }
+  
+  .program {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .program h3 {
+    margin: 0 0 10px 0;
+  }
+  
+  .task-input {
+    width: calc(100% - 100px);
+    margin-right: 10px;
+  }
+  
+  .add-task-btn, .delete-checked-btn {
+    margin-top: 10px;
+  }
+  
+  .delete-program-btn {
+    background-color: white;
+    color: #ff4d4d;
+    border: #ff4d4d;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .delete-program-btn:hover {
+    background-color: #080000;
+  }
+  
