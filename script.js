@@ -1,5 +1,5 @@
    // Function to update the live date
-   function updateLiveDate() {
+   function LiveDate() {
     const liveDateElement = document.getElementById('liveDate');
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Singapore' };
     const formattedDate = new Date().toLocaleDateString('en-SG', options);
@@ -7,10 +7,10 @@
   }
 
   // Update the live date every second
-  setInterval(updateLiveDate, 1000);
+  setInterval(LiveDate, 1000);
 
   // Initial call to update the live date when the page loads
-  updateLiveDate(); 
+  LiveDate(); 
 
 document.addEventListener('DOMContentLoaded', function() {
     const addProgramBtn = document.getElementById('addProgramBtn');
