@@ -1,16 +1,18 @@
-// Function to update the live date
-function updateLiveDate() {
-  const liveDateElement = document.getElementById('liveDate');
-  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Singapore' };
-  const formattedDate = new Date().toLocaleDateString('en-SG', options);
-  liveDateElement.textContent = formattedDate;
-}
+document.addEventListener('DOMContentLoaded', () => {
+  // Function to update the live date
+  function updateLiveDate() {
+      const liveDateElement = document.getElementById('liveDate');
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'Asia/Singapore' };
+      const formattedDate = new Date().toLocaleDateString('en-SG', options);
+      liveDateElement.textContent = formattedDate;
+  }
 
-// Update the live date every second
-setInterval(updateLiveDate, 1000);
+  // Update the live date every second
+  setInterval(updateLiveDate, 1000);
 
-// Initial call to update the live date when the page loads
-updateLiveDate();
+  // Initial call to update the live date when the page loads
+  updateLiveDate();
+});
 
 document.addEventListener('DOMContentLoaded', function() {
     const addProgramBtn = document.getElementById('addProgramBtn');
